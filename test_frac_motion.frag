@@ -218,14 +218,12 @@
 #endif
 
 uniform vec2 iResolution;
-uniform int iFrame;
 uniform vec2 iMouse;
 uniform vec2 iPosition;
 uniform float iTime;
 uniform float iSlider01;
 uniform float iSlider02;
 uniform float iSlider03;
-uniform float iSlider04;
 
 
 float random (in vec2 _st) {
@@ -272,22 +270,14 @@ float fbm ( in vec2 _st) {
 
 void main() {
     vec2 st = gl_FragCoord.xy/iResolution.xy*3.;
-    // st += st * abs(sin(iTime*0.1)*3.0);
+    // st += st * abs(sin(iTime*0.1)*3.0); // ZOOM
     vec3 color = vec3(0.0);
 
     vec2 q = vec2(0.);
     q.x = fbm( st + 0.00*iTime)*iSlider03;
     q.y = fbm( st + vec2(1.0))*iSlider02;
 
-
-    // Normalized pixel coordinates (from 0 to 1)
-    //vec2 uv = gl_FragCoord.xy/iResolution.xy;
-    //uv=uv/4.0+.5;
-    //uv-=iMouse.xy/iResolution.xy/4.0;
-
     vec2 m = iPosition;
-    //float mm = n.x*0.5;
-    //vec2 m = vec2(mm, n.y);
     
     vec2 dm = m.xy;
     if (dot(dm, dm) > 0.0)
@@ -297,10 +287,10 @@ void main() {
     vec2 lala = adjust * dm;
     
     vec2 r = vec2(0.);
-    r.x = fbm( st + 1.0*q + lala + 0.015*iTime );
-    r.y = fbm( st + 1.0*q + lala+ 0.126*iTime);
+    r.x = fbm( st + 1.0*q + lala + 0.015 * iTime);
+    r.y = fbm( st + 1.0*q + lala+ 0.126 * iTime);
 
-    float f = fbm(st+r*iSlider04);
+    float f = fbm(st+r);
     
     color = mix(vec3(0.101961,0.619608,0.666667),
     vec3(0.666667,0.666667,0.498039),
